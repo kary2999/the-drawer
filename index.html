@@ -391,6 +391,12 @@ fetch('data/sites.json').then(r => r.json()).then(data => {
   });
   document.getElementById('s-total').textContent = totalItems;
   document.getElementById('s-cat').textContent = data.categories.length;
+
+  // 自动加载第一个项目作为默认显示
+  const firstItem = document.querySelector('.item');
+  if (firstItem && allItems.length > 0) {
+    setTimeout(() => firstItem.click(), 200);
+  }
 });
 
 function loadItem(item, el) {
