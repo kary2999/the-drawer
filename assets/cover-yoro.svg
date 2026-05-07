@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg-yoro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6f1e8"/>
+      <stop offset="1" stop-color="#ebe1cc"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg-yoro)"/>
+  <g opacity="0.08">
+    <line x1="0" y1="40" x2="1200" y2="40" stroke="#9a876b"/>
+    <line x1="0" y1="84" x2="1200" y2="84" stroke="#9a876b"/>
+    <line x1="0" y1="128" x2="1200" y2="128" stroke="#9a876b"/>
+    <line x1="0" y1="172" x2="1200" y2="172" stroke="#9a876b"/>
+  </g>
+  <text x="80" y="180" font-family="Cormorant Garamond, Times, serif" font-style="italic" font-size="28" fill="#9a876b" letter-spacing="14">RIKKA · MAY 2026</text>
+  <text x="80" y="350" font-family="Songti SC, Hiragino Mincho ProN, serif" font-size="180" font-weight="400" fill="#1f1a14" letter-spacing="8">立 夏</text>
+  <text x="80" y="430" font-family="Cormorant Garamond, Times, serif" font-style="italic" font-size="22" fill="#5a4f40" letter-spacing="6">When the wind turns green</text>
+  <text x="80" y="540" font-family="Songti SC, serif" font-size="20" fill="#5a4f40" letter-spacing="20">远 方 来 信</text>
+  <line x1="80" y1="560" x2="240" y2="560" stroke="#7a3b2d" stroke-width="2"/>
+  <text x="1120" y="80" font-family="Cormorant Garamond, serif" font-style="italic" font-size="16" fill="#9a876b" text-anchor="end" letter-spacing="6">No. 05</text>
+  <circle cx="1080" cy="540" r="40" fill="none" stroke="#7a3b2d" stroke-width="2"/>
+  <text x="1080" y="548" font-family="Songti SC, serif" font-size="20" fill="#7a3b2d" text-anchor="middle">夏</text>
+</svg>
