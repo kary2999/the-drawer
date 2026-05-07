@@ -12,13 +12,13 @@
       "color": "#0f62fe",
       "items": [
         {
-          "id": "studyupup",
-          "title_zh": "StudyUpUp",
-          "title_en": "StudyUpUp · AI 学习平台",
-          "tagline": "AI 驱动的英语 / 日语学习",
-          "url": "https://studyupup.ai/",
-          "embed_safe": false,
-          "tags": ["英语", "日语", "AI", "学习"]
+          "id": "tokyo-guide",
+          "title_zh": "东京·攻略手帖",
+          "title_en": "TOKYO GUIDE · Journal",
+          "tagline": "亲历者的东京旅行攻略",
+          "url": "https://kary2999.github.io/tokyo-guide/journal.html",
+          "embed_safe": true,
+          "tags": ["东京", "攻略", "旅行"]
         },
         {
           "id": "japanese-grammar",
