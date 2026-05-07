@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诗和远方·总抽屉 — THE DRAWER</title>
+<style>
+:root {
+  --bg: #f5f1e8;
+  --bg-2: #efe7d3;
+  --paper: #fbf6ea;
+  --ink: #1f1a14;
+  --ink-2: #4d4135;
+  --mute: #8a7e6a;
+  --line: #d4c8b0;
+  --vermilion: #b13b1f;
+  --gold: #b39158;
+  --green: #4d6a47;
+  --blue: #0f62fe;
+  --shadow: 0 12px 36px rgba(31, 26, 20, 0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Noto Serif JP", "Songti SC", "Hiragino Mincho ProN", serif;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============== APP LAYOUT ============== */
+.app {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 64px 1fr;
+  grid-template-areas:
+    "topbar topbar"
+    "sidebar main";
+  height: 100vh;
+}
+
+/* ============== TOPBAR ============== */
+.topbar {
+  grid-area: topbar;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: relative;
+  z-index: 10;
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 700; letter-spacing: 0.2em;
+}
+.brand .seal {
+  width: 32px; height: 32px;
+  background: var(--vermilion); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; transform: rotate(-3deg);
+  font-size: 14px; letter-spacing: 0;
+}
+.brand .name-zh { font-size: 16px; }
+.brand .name-en {
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-style: italic; color: var(--mute); font-size: 13px;
+}
+.topbar-actions {
+  display: flex; align-items: center; gap: 16px;
+  font-size: 12px; letter-spacing: 0.3em;
+}
+.url-display {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  font-size: 13px; color: var(--ink-2);
+  max-width: 480px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+.btn {
+  background: var(--vermilion); color: var(--paper);
+  padding: 8px 16px; border: none;
+  font-size: 12px; letter-spacing: 0.2em;
+  cursor: pointer; font-family: inherit;
+  text-decoration: none; display: inline-block;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.85; }
+.btn.ghost {
+  background: transparent;
+  color: var(--ink-2); border: 1px solid var(--line);
+}
+.btn.ghost:hover { color: var(--vermilion); border-color: var(--vermilion); }
+
+/* ============== SIDEBAR ============== */
+.sidebar {
+  grid-area: sidebar;
+  background: var(--paper);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 24px 0;
+}
+.cat-block {
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.cat-block:last-child { border-bottom: none; }
+.cat-header {
+  padding: 0 20px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cat-header .name {
+  font-size: 11px; letter-spacing: 0.5em;
+  color: var(--vermilion); text-transform: uppercase;
+}
+.cat-header .count {
+  font-size: 11px; color: var(--mute);
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+}
+.item {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background 0.2s, border-left-color 0.2s;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+.item:hover {
+  background: rgba(212, 200, 176, 0.25);
+}
+.item.active {
+  background: var(--bg);
+  border-left-color: var(--vermilion);
+}
+.item .title {
+  font-size: 15px; font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.item .title .embed-mark {
+  display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+.item .title .embed-mark.warn { background: var(--gold); }
+.item .tagline {
+  font-size: 12px; color: var(--mute);
+  font-style: italic; line-height: 1.5;
+}
+.item .url { display: none; }
+.tags {
+  margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;
+}
+.tags .tag {
+  font-size: 9px; letter-spacing: 0.2em;
+  padding: 2px 6px; border: 1px solid var(--line);
+  color: var(--mute);
+}
+
+/* ============== MAIN ============== */
+.main {
+  grid-area: main;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.main-inner {
+  flex: 1; position: relative;
+  background: #fff;
+  margin: 0; overflow: hidden;
+}
+.iframe-host {
+  width: 100%; height: 100%;
+  border: none;
+}
+
+/* WELCOME (when nothing selected) */
+.welcome {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg); padding: 48px;
+  text-align: center;
+}
+.welcome::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, transparent 0 26px, rgba(154,135,107,0.08) 26px 27px);
+}
+.welcome > * { position: relative; z-index: 1; }
+.welcome h1 {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 400; line-height: 1; letter-spacing: 0.04em;
+  margin-bottom: 24px;
+}
+.welcome h1 small {
+  display: block; font-size: 0.18em;
+  font-family: "Cormorant Garamond", serif; font-style: italic;
+  color: var(--mute); letter-spacing: 0.5em;
+  margin-top: 24px; text-transform: uppercase;
+}
+.welcome .lead {
+  font-size: 18px; color: var(--ink-2);
+  max-width: 600px; line-height: 2.2; margin-bottom: 32px;
+}
+.welcome .stats {
+  display: flex; gap: 48px;
+  margin-top: 24px;
+}
+.welcome .stat-card {
+  background: var(--paper); padding: 20px 32px;
+  border: 1px solid var(--line);
+}
+.welcome .stat-card .num {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 48px; color: var(--vermilion);
+  letter-spacing: -0.02em; line-height: 1;
+}
+.welcome .stat-card .label {
+  font-size: 11px; color: var(--mute);
+  letter-spacing: 0.4em; margin-top: 6px;
+  text-transform: uppercase;
+}
+.welcome .hint {
+  margin-top: 40px;
+  font-size: 13px; color: var(--mute);
+  letter-spacing: 0.3em;
+}
+
+/* IFRAME ERROR (X-Frame-Options blocks) */
+.iframe-error {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg); padding: 48px;
+  text-align: center;
+}
+.iframe-error h2 {
+  font-size: 32px; font-weight: 400;
+  margin-bottom: 16px; letter-spacing: 0.04em;
+}
+.iframe-error p {
+  font-size: 16px; color: var(--ink-2);
+  max-width: 560px; line-height: 2; margin-bottom: 24px;
+}
+.iframe-error .url { display: none; }
+
+/* LOADING */
+.loading {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(245, 241, 232, 0.9);
+  pointer-events: none; z-index: 5;
+}
+.loading.hidden { display: none; }
+.loading .spinner {
+  width: 40px; height: 40px;
+  border: 2px solid var(--line);
+  border-top-color: var(--vermilion);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 64px auto 1fr;
+    grid-template-areas:
+      "topbar"
+      "sidebar"
+      "main";
+  }
+  .sidebar {
+    max-height: 30vh;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .url-display { display: none; }
+}
+
+/* SCROLLBAR */
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-track { background: var(--paper); }
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal">远</div>
+      <div>
+        <div class="name-zh">诗和远方·总抽屉</div>
+        <div class="name-en">The Drawer · A Faraway Matrix</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <div class="url-display" id="url-display" style="font-style:italic;color:var(--mute)">— 选择左边一个项目 —</div>
+      <a class="btn ghost" id="btn-home" href="javascript:void(0)" onclick="showWelcome()">首页</a>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-inner" id="main-inner">
+      <!-- WELCOME -->
+      <div class="welcome" id="welcome">
+        <h1>诗和远方<small>The Drawer · A Faraway Matrix</small></h1>
+        <p class="lead">把所有的远方收进一个抽屉，<br>左边点一格，右边就翻一页。</p>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="num" id="s-total">15</div>
+            <div class="label">站点</div>
+          </div>
+          <div class="stat-card">
+            <div class="num" id="s-cat">3</div>
+            <div class="label">类别</div>
+          </div>
+          <div class="stat-card">
+            <div class="num">∞</div>
+            <div class="label">下一站</div>
+          </div>
+        </div>
+        <div class="hint">← 从左边任选一个开始</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+let allItems = [];
+let currentItem = null;
+
+fetch('data/sites.json').then(r => r.json()).then(data => {
+  const sidebar = document.getElementById('sidebar');
+  let totalItems = 0;
+  data.categories.forEach(cat => {
+    totalItems += cat.items.length;
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    block.innerHTML = `
+      <div class="cat-header">
+        <span class="name" style="color:${cat.color || 'var(--vermilion)'}">${cat.name_zh} · ${cat.name_en}</span>
+        <span class="count">${cat.items.length} items</span>
+      </div>
+    `;
+    cat.items.forEach(item => {
+      allItems.push(item);
+      const el = document.createElement('div');
+      el.className = 'item';
+      el.dataset.id = item.id;
+      const embedClass = item.embed_safe === false ? 'warn' : '';
+      const tagsHtml = (item.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      el.innerHTML = `
+        <div class="title"><span class="embed-mark ${embedClass}"></span>${item.title_zh}</div>
+        <div class="tagline">"${item.tagline}"</div>
+        <div class="tags">${tagsHtml}</div>
+      `;
+      el.addEventListener('click', () => loadItem(item));
+      block.appendChild(el);
+    });
+    sidebar.appendChild(block);
+  });
+  document.getElementById('s-total').textContent = totalItems;
+  document.getElementById('s-cat').textContent = data.categories.length;
+});
+
+function loadItem(item) {
+  currentItem = item;
+  document.querySelectorAll('.item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === item.id);
+  });
+  document.getElementById('url-display').textContent = item.title_zh + ' · ' + (item.title_en || '');
+  document.getElementById('url-display').style.fontStyle = 'normal';
+  document.getElementById('url-display').style.color = 'var(--ink)';
+
+  const inner = document.getElementById('main-inner');
+  inner.innerHTML = '';
+
+  // 已知不允许嵌入的，直接显示提示页（不暴露域名 / 不开新窗口）
+  if (item.embed_safe === false) {
+    inner.innerHTML = `
+      <div class="iframe-error">
+        <h2>${item.title_zh}</h2>
+        <p>这个站点暂时不支持嵌入预览。<br>稍后再来看看，或者翻翻别的项目。</p>
+      </div>`;
+    return;
+  }
+
+  // 加载 iframe
+  const loading = document.createElement('div');
+  loading.className = 'loading';
+  loading.innerHTML = '<div class="spinner"></div>';
+  inner.appendChild(loading);
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'iframe-host';
+  iframe.src = item.url;
+  iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+  iframe.setAttribute('loading', 'eager');
+  let loaded = false;
+  iframe.onload = () => {
+    loaded = true;
+    loading.classList.add('hidden');
+  };
+  inner.appendChild(iframe);
+
+  // 6 秒后没 onload，假定被拦截
+  setTimeout(() => {
+    if (!loaded) {
+      loading.classList.add('hidden');
+      iframe.remove();
+      const fallback = document.createElement('div');
+      fallback.className = 'iframe-error';
+      fallback.innerHTML = `
+        <h2>${item.title_zh}</h2>
+        <p>这个站点暂时不支持嵌入预览。<br>翻翻别的项目吧。</p>
+      `;
+      inner.appendChild(fallback);
+    }
+  }, 6000);
+}
+
+function showWelcome() {
+  currentItem = null;
+  document.querySelectorAll('.item').forEach(el => el.classList.remove('active'));
+  document.getElementById('url-display').textContent = '— 选择左边一个项目 —';
+  document.getElementById('url-display').style.fontStyle = 'italic';
+  document.getElementById('url-display').style.color = 'var(--mute)';
+  location.reload();
+}
+</script>
+
+</body>
+</html>
