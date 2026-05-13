@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>诗和远方·总抽屉 — POETRY & DISTANCE</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root {
   --bg: #0a0a0c;
@@ -24,27 +26,20 @@ html, body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--serif);
-  line-height: 1.85;
   letter-spacing: 0.03em;
   height: 100vh;
   overflow: hidden;
 }
-body::before {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.04;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.85'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
 
 .app {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 320px 1fr;
   grid-template-rows: 56px 1fr;
-  grid-template-areas: "topbar topbar" "sidebar main";
+  grid-template-areas: "topbar topbar" "left main";
   height: 100vh;
-  position: relative;
-  z-index: 1;
 }
 
-/* MASTHEAD */
+/* TOPBAR */
 .topbar {
   grid-area: topbar;
   background: var(--bg);
@@ -71,8 +66,8 @@ body::before {
   background: transparent;
   border: 1px solid var(--line);
   padding: 6px 14px;
-  font-size: 12px; color: var(--ink-2);
-  max-width: 380px; overflow: hidden;
+  font-size: 12px; color: var(--gold);
+  max-width: 360px; overflow: hidden;
   text-overflow: ellipsis; white-space: nowrap;
   letter-spacing: 0.05em;
   font-family: var(--display); font-style: italic;
@@ -91,92 +86,159 @@ body::before {
   letter-spacing: 0.5em; text-transform: uppercase;
 }
 
-/* SIDEBAR */
-.sidebar {
-  grid-area: sidebar;
+/* LEFT — map + avatars */
+.left {
+  grid-area: left;
   background: var(--bg-2);
   border-right: 1px solid var(--line);
+  display: grid;
+  grid-template-rows: 360px 1fr;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%; height: 100%;
+  background: var(--bg-3);
+  position: relative;
+}
+.map-overlay {
+  position: absolute; top: 12px; left: 12px; z-index: 500;
+  font-family: var(--display); font-style: italic;
+  font-size: 10px; letter-spacing: 0.4em;
+  color: var(--gold); pointer-events: none;
+}
+.map-overlay .vol-tag {
+  display: block;
+  font-size: 9px; color: var(--mute);
+  letter-spacing: 0.5em; margin-top: 3px;
+}
+.map-attribution {
+  position: absolute; bottom: 4px; right: 6px; z-index: 500;
+  font-size: 9px; color: var(--mute); opacity: 0.6;
+  font-family: var(--display); font-style: italic;
+}
+
+/* Leaflet custom marker */
+.pin-marker {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  border: 2px solid var(--bg);
+  font-family: var(--display);
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+.pin-marker.active {
+  background: var(--red);
+  transform: scale(1.2);
+  color: var(--ink);
+}
+.pin-marker:hover {
+  transform: scale(1.15);
+}
+.leaflet-popup-content-wrapper {
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--gold); border-radius: 0;
+}
+.leaflet-popup-content { margin: 10px 14px; font-family: var(--serif); }
+.leaflet-popup-content .pp-num {
+  font-size: 10px; color: var(--gold);
+  letter-spacing: 0.4em; font-family: var(--display);
+  font-style: italic;
+}
+.leaflet-popup-content .pp-name {
+  font-size: 14px; color: var(--ink);
+  margin-top: 2px; letter-spacing: 0.04em;
+}
+.leaflet-popup-tip { background: var(--paper); border: 1px solid var(--gold); }
+
+/* avatars panel */
+.side-panel {
   overflow-y: auto;
-  padding: 16px 0;
+  padding: 0;
 }
 .cat-block {
   border-bottom: 1px solid var(--line);
-  padding: 12px 0;
+  padding: 14px 0;
 }
 .cat-block:last-child { border-bottom: none; }
-.cat-header {
-  padding: 6px 22px 14px;
+.cat-head {
+  padding: 0 18px 12px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.cat-header .name {
-  font-size: 10px; letter-spacing: 0.6em;
+.cat-head .name {
+  font-size: 9px; letter-spacing: 0.5em;
   color: var(--gold); text-transform: uppercase;
   font-family: var(--display); font-style: italic;
 }
-.cat-header .count {
+.cat-head .count {
   font-size: 11px; color: var(--mute);
   font-family: var(--display); font-style: italic;
 }
 
-.item {
-  padding: 14px 22px;
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  border-bottom: 1px solid var(--line);
-  position: relative;
-  transition: background 0.15s, border-left-color 0.15s;
+.avatars-row {
+  padding: 0 14px;
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: flex-start;
 }
-.item:last-child { border-bottom: none; }
-.item:hover { background: var(--bg-3); }
-.item.active {
-  background: var(--paper);
-  border-left-color: var(--gold);
+.avatar {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  cursor: pointer; width: 60px;
+  transition: transform 0.15s;
 }
-.item .num-row {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 9px; letter-spacing: 0.4em; color: var(--mute);
-  text-transform: uppercase; margin-bottom: 6px;
+.avatar:hover { transform: translateY(-2px); }
+.avatar .ring {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--paper); color: var(--gold);
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 400;
+  transition: all 0.2s;
+}
+.avatar.active .ring {
+  background: var(--gold); color: var(--bg);
+}
+.avatar .label {
+  font-size: 10px; color: var(--ink-2);
+  white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; max-width: 60px;
+  text-align: center; letter-spacing: 0.05em;
+}
+.avatar.active .label { color: var(--gold); }
+
+.tag-rail {
+  padding: 0 14px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.tag-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; background: var(--paper);
+  color: var(--ink-2); border: 1px solid var(--line);
+  border-radius: 999px; font-size: 11px;
+  letter-spacing: 0.1em; cursor: pointer;
+  transition: all 0.2s;
+}
+.tag-pill:hover, .tag-pill.active {
+  border-color: var(--gold); color: var(--ink);
+}
+.tag-pill .num {
   font-family: var(--display); font-style: italic;
-}
-.item .embed-mark {
-  display: inline-block; width: 5px; height: 5px;
-  border-radius: 50%; background: var(--gold);
-}
-.item .embed-mark.warn { background: var(--red); }
-.item .title {
-  font-size: 15px; font-weight: 400;
-  letter-spacing: 0.04em; color: var(--ink);
-  margin-bottom: 4px; line-height: 1.4;
-}
-.item .tagline {
-  font-size: 12px; color: var(--ink-2);
-  font-family: var(--display); font-style: italic;
-  letter-spacing: 0.05em; line-height: 1.5;
-}
-.item .tags {
-  margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap;
-}
-.item .tag {
-  font-size: 9px; letter-spacing: 0.2em;
-  padding: 2px 6px; border: 1px solid var(--line);
-  color: var(--mute); text-transform: uppercase;
+  color: var(--gold);
 }
 
 /* MAIN */
 .main {
   grid-area: main;
-  background: var(--bg);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  position: relative;
-}
-.main-inner {
-  flex: 1; position: relative;
-  background: var(--bg-3); overflow: hidden;
+  background: var(--bg-3);
+  position: relative; overflow: hidden;
 }
 .iframe-host {
-  width: 100%; height: 100%;
-  border: none; background: #fff;
+  width: 100%; height: 100%; border: none; background: #fff;
 }
 
 /* WELCOME */
@@ -184,77 +246,45 @@ body::before {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  background: var(--bg-3);
-  padding: 48px; text-align: center;
+  background: var(--bg-3); padding: 48px; text-align: center;
 }
 .welcome::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background-image: radial-gradient(circle at 30% 20%, rgba(201,168,108,0.08), transparent 50%),
-                    radial-gradient(circle at 70% 80%, rgba(217,79,79,0.04), transparent 50%);
+  background-image: radial-gradient(circle at 30% 20%, rgba(201,168,108,0.08), transparent 50%);
 }
 .welcome > * { position: relative; z-index: 1; }
-.welcome .issue-tag {
-  display: inline-block;
-  padding: 5px 14px;
+.welcome .tag {
+  display: inline-block; padding: 5px 14px;
   border: 1px solid var(--gold);
   font-size: 10px; letter-spacing: 0.6em;
-  color: var(--gold);
-  text-transform: uppercase;
+  color: var(--gold); text-transform: uppercase;
   margin-bottom: 32px;
   font-family: var(--display); font-style: italic;
 }
 .welcome h1 {
-  font-size: clamp(64px, 9vw, 128px);
-  font-weight: 400; line-height: 0.92;
-  letter-spacing: -0.01em;
-  color: var(--ink);
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 400; line-height: 0.95;
+  letter-spacing: -0.01em; color: var(--ink);
   margin-bottom: 12px;
 }
 .welcome h1 em {
-  font-family: var(--display);
-  font-style: italic;
-  color: var(--gold);
-  font-weight: 400;
-}
-.welcome .deck {
-  display: grid; grid-template-columns: auto 1fr;
-  gap: 32px; align-items: start;
-  margin-top: 32px; max-width: 720px;
-}
-.welcome .deck-rule {
-  width: 60px; height: 1px; background: var(--gold); margin-top: 14px;
-}
-.welcome .deck p {
-  font-size: 16px; line-height: 2;
-  color: var(--ink-2); text-align: left;
-}
-.welcome .deck p em {
-  color: var(--gold); font-style: italic;
-}
-.welcome .stats {
-  display: flex; gap: 32px; margin-top: 48px;
-}
-.welcome .stat {
-  text-align: center;
-}
-.welcome .stat .num {
   font-family: var(--display); font-style: italic;
-  font-size: 56px; color: var(--gold); line-height: 1;
-  letter-spacing: -0.02em;
+  color: var(--gold); font-weight: 400;
 }
-.welcome .stat .label {
-  font-size: 10px; color: var(--mute);
-  letter-spacing: 0.5em; margin-top: 6px;
-  text-transform: uppercase;
+.welcome .lead {
+  font-size: 14px; color: var(--ink-2);
+  line-height: 2; margin-top: 24px;
+  font-family: var(--display); font-style: italic;
+  max-width: 460px;
 }
 .welcome .hint {
-  margin-top: 40px;
-  font-size: 11px; color: var(--mute);
+  margin-top: 32px;
+  font-size: 10px; color: var(--mute);
   letter-spacing: 0.5em; text-transform: uppercase;
   font-family: var(--display); font-style: italic;
 }
 
-/* IFRAME ERROR */
+/* iframe error */
 .iframe-error {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
@@ -262,20 +292,18 @@ body::before {
   background: var(--bg-3); padding: 48px; text-align: center;
 }
 .iframe-error h2 {
-  font-size: 32px; font-weight: 400;
-  margin-bottom: 14px; letter-spacing: 0.04em;
-  color: var(--ink);
+  font-size: 28px; font-weight: 400;
+  margin-bottom: 14px; color: var(--ink);
 }
 .iframe-error h2 em {
   font-family: var(--display); font-style: italic; color: var(--gold);
 }
 .iframe-error p {
-  font-size: 15px; color: var(--ink-2);
+  font-size: 14px; color: var(--ink-2);
   max-width: 420px; line-height: 2;
   font-family: var(--display); font-style: italic;
 }
 
-/* LOADING */
 .loading {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -292,22 +320,23 @@ body::before {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* SCROLLBAR */
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-track { background: var(--bg-2); }
-.sidebar::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.side-panel::-webkit-scrollbar { width: 6px; }
+.side-panel::-webkit-scrollbar-track { background: var(--bg-2); }
+.side-panel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
-    grid-template-rows: 56px auto 1fr;
-    grid-template-areas: "topbar" "sidebar" "main";
+    grid-template-rows: 56px 280px 240px 1fr;
+    grid-template-areas: "topbar" "map-mobile" "side-mobile" "main";
   }
-  .sidebar { max-height: 28vh; border-right: none; border-bottom: 1px solid var(--line); }
+  .left {
+    display: contents;
+  }
+  #map { grid-area: map-mobile; }
+  .side-panel { grid-area: side-mobile; border-bottom: 1px solid var(--line); }
   .status { display: none; }
-  .welcome h1 { font-size: 56px; }
-  .welcome .deck { grid-template-columns: 1fr; }
+  .welcome h1 { font-size: 48px; }
 }
 </style>
 </head>
@@ -320,103 +349,153 @@ body::before {
       <span>POETRY &amp; DISTANCE</span>
     </div>
     <div class="topbar-actions">
-      <div class="status" id="status">— select an issue —</div>
-      <button class="btn" id="home-btn" onclick="location.reload()">home</button>
+      <div class="status" id="status">— pick a pin on the map —</div>
+      <button class="btn" onclick="location.reload()">home</button>
       <span class="vol">VOL. 01</span>
     </div>
   </header>
 
-  <aside class="sidebar" id="sidebar"></aside>
+  <aside class="left">
+    <div id="map">
+      <div class="map-overlay">
+        JAPAN · 日本
+        <span class="vol-tag">10 ISSUES · UPDATED DAILY</span>
+      </div>
+    </div>
+    <div class="side-panel" id="side-panel"></div>
+  </aside>
 
   <main class="main">
-    <div class="main-inner" id="main-inner">
+    <div id="main-inner" style="position:relative;height:100%;">
       <div class="welcome" id="welcome">
-        <div class="issue-tag">Issue 01 · 立夏 · May 2026</div>
+        <div class="tag">Issue 01 · 立夏 · May 2026</div>
         <h1>诗 与 <em>远方</em></h1>
-        <div class="deck">
-          <div class="deck-rule"></div>
-          <div>
-            <p>把所有的远方收进一个抽屉。<br>左边点一格，右边就翻一页。</p>
-            <p style="margin-top:14px;font-size:13px;color:var(--mute);font-family:var(--display);font-style:italic">A drawer of faraway · curated by kary2999 · updated daily.</p>
-          </div>
-        </div>
-        <div class="stats">
-          <div class="stat"><div class="num" id="s-total">15</div><div class="label">Issues</div></div>
-          <div class="stat"><div class="num" id="s-cat">3</div><div class="label">Sections</div></div>
-          <div class="stat"><div class="num">∞</div><div class="label">Onward</div></div>
-        </div>
-        <div class="hint">← Pick one from the left</div>
+        <div class="lead">点左边地图上的金色 pin，<br>或下方的小头像。</div>
+        <div class="hint">← click a pin</div>
       </div>
     </div>
   </main>
 </div>
 
 <script>
-let allItems = [];
+let map, allItems = [], markers = {}, currentItem = null;
 
 fetch('data/sites.json').then(r => r.json()).then(data => {
-  const sidebar = document.getElementById('sidebar');
-  let totalItems = 0;
-  data.categories.forEach(cat => {
-    totalItems += cat.items.length;
-    const block = document.createElement('div');
-    block.className = 'cat-block';
-    const header = document.createElement('div');
-    header.className = 'cat-header';
-    header.innerHTML = `
-      <span class="name">${cat.name_zh} · ${cat.name_en}</span>
-      <span class="count">${String(cat.items.length).padStart(2,'0')}</span>
-    `;
-    block.appendChild(header);
-    cat.items.forEach((item, idx) => {
-      allItems.push(item);
-      const el = document.createElement('div');
-      el.className = 'item';
-      el.dataset.id = item.id;
-      const embedClass = item.embed_safe === false ? 'warn' : '';
-      const tagsHtml = (item.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('');
-      el.innerHTML = `
-        <div class="num-row">
-          <span class="embed-mark ${embedClass}"></span>
-          <span>No. ${String(idx+1).padStart(2,'0')}</span>
-        </div>
-        <div class="title">${item.title_zh}</div>
-        <div class="tagline">"${item.tagline}"</div>
-        <div class="tags">${tagsHtml}</div>
-      `;
-      el.addEventListener('click', () => loadItem(item, el));
-      block.appendChild(el);
-    });
-    sidebar.appendChild(block);
-  });
-  document.getElementById('s-total').textContent = totalItems;
-  document.getElementById('s-cat').textContent = data.categories.length;
-
-  // 自动加载第一个项目作为默认显示
-  const firstItem = document.querySelector('.item');
-  if (firstItem && allItems.length > 0) {
-    setTimeout(() => firstItem.click(), 200);
+  initMap(data);
+  initSidePanel(data);
+  // 自动加载第一个 远方
+  const firstGeo = data.categories[0].items.find(it => it.lat);
+  if (firstGeo) {
+    setTimeout(() => loadItem(firstGeo), 200);
   }
 });
 
-function loadItem(item, el) {
-  document.querySelectorAll('.item').forEach(d => d.classList.remove('active'));
-  el.classList.add('active');
+function initMap(data) {
+  map = L.map('map', {
+    center: [37.5, 138.5],
+    zoom: 5,
+    zoomControl: false,
+    attributionControl: false,
+    scrollWheelZoom: true,
+  });
 
+  // CartoDB Dark Matter — 暗色调，跟暗夜杂志风一致
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+    subdomains: 'abcd', maxZoom: 19,
+    attribution: '© OSM © CartoDB',
+  }).addTo(map);
+
+  L.control.zoom({ position: 'topright' }).addTo(map);
+  L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map);
+
+  // 加 markers
+  const yuanfangCat = data.categories.find(c => c.id === 'yuanfang');
+  yuanfangCat.items.forEach(it => {
+    if (!it.lat) return;
+    allItems.push(it);
+    const icon = L.divIcon({
+      className: 'pin-marker-wrap',
+      html: `<div class="pin-marker" data-id="${it.id}">${it.no}</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      popupAnchor: [0, -16],
+    });
+    const m = L.marker([it.lat, it.lng], { icon }).addTo(map);
+    m.bindPopup(`<div class="pp-num">NO. ${it.no} · ${it.region}</div><div class="pp-name">${it.title_zh}</div>`);
+    m.on('click', () => loadItem(it));
+    markers[it.id] = m;
+  });
+}
+
+function initSidePanel(data) {
+  const panel = document.getElementById('side-panel');
+  data.categories.forEach(cat => {
+    if (cat.id === 'yuanfang') {
+      // 全境项目（lat=null）显示为标签
+      const noGeo = cat.items.filter(it => !it.lat);
+      if (noGeo.length === 0) return;
+      const block = document.createElement('div');
+      block.className = 'cat-block';
+      block.innerHTML = `<div class="cat-head"><span class="name">全境 · ALL JAPAN</span><span class="count">${noGeo.length}</span></div>`;
+      const rail = document.createElement('div');
+      rail.className = 'tag-rail';
+      noGeo.forEach(it => {
+        const t = document.createElement('span');
+        t.className = 'tag-pill';
+        t.dataset.id = it.id;
+        t.innerHTML = `<span class="num">${it.no}</span> ${it.title_zh}`;
+        t.addEventListener('click', () => loadItem(it));
+        rail.appendChild(t);
+      });
+      block.appendChild(rail);
+      panel.appendChild(block);
+      noGeo.forEach(it => allItems.push(it));
+      return;
+    }
+    // 学习 / 外部 → 头像
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    block.innerHTML = `<div class="cat-head"><span class="name">${cat.name_zh} · ${cat.name_en}</span><span class="count">${cat.items.length}</span></div>`;
+    const row = document.createElement('div');
+    row.className = 'avatars-row';
+    cat.items.forEach(it => {
+      allItems.push(it);
+      const a = document.createElement('div');
+      a.className = 'avatar';
+      a.dataset.id = it.id;
+      a.innerHTML = `<div class="ring">${it.short || it.title_zh.charAt(0)}</div><div class="label">${it.title_zh}</div>`;
+      a.addEventListener('click', () => loadItem(it));
+      row.appendChild(a);
+    });
+    block.appendChild(row);
+    panel.appendChild(block);
+  });
+}
+
+function loadItem(item) {
+  currentItem = item;
+  // 状态栏
   const status = document.getElementById('status');
   status.textContent = item.title_zh + (item.title_en ? ' · ' + item.title_en : '');
-  status.style.color = 'var(--gold)';
-  status.style.fontStyle = 'italic';
 
+  // 高亮 marker
+  document.querySelectorAll('.pin-marker').forEach(p => p.classList.remove('active'));
+  if (item.lat && markers[item.id]) {
+    const pin = document.querySelector(`.pin-marker[data-id="${item.id}"]`);
+    if (pin) pin.classList.add('active');
+    map.flyTo([item.lat, item.lng], 7, { duration: 0.8 });
+    markers[item.id].openPopup();
+  }
+  // 高亮 avatar / tag
+  document.querySelectorAll('.avatar').forEach(a => a.classList.toggle('active', a.dataset.id === item.id));
+  document.querySelectorAll('.tag-pill').forEach(t => t.classList.toggle('active', t.dataset.id === item.id));
+
+  // iframe
   const inner = document.getElementById('main-inner');
   inner.innerHTML = '';
 
   if (item.embed_safe === false) {
-    inner.innerHTML = `
-      <div class="iframe-error">
-        <h2>${item.title_zh}<br><em>暂不支持嵌入预览</em></h2>
-        <p>这个站点的安全策略拒绝了 iframe。<br>翻翻别的项目吧。</p>
-      </div>`;
+    inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂不支持嵌入预览</em></h2><p>这个站点的安全策略拒绝了 iframe。<br>翻翻别的项目吧。</p></div>`;
     return;
   }
 
@@ -445,16 +524,11 @@ function loadItem(item, el) {
     if (!loaded) {
       loading.classList.add('hidden');
       iframe.remove();
-      inner.innerHTML = `
-        <div class="iframe-error">
-          <h2>${item.title_zh}<br><em>暂时未能加载</em></h2>
-          <p>站点拒绝嵌入或正在响应中。<br>翻翻别的项目吧。</p>
-        </div>`;
+      inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂时未能加载</em></h2><p>站点拒绝嵌入或正在响应中。<br>翻翻别的项目吧。</p></div>`;
     }
   }, 6000);
 }
 
-// 首屏加载完后，后台异步预热其他项目（DNS + TLS + 内容 prefetch）
 function warmupOthers() {
   const origins = new Set();
   allItems.forEach(it => {
@@ -463,23 +537,13 @@ function warmupOthers() {
   });
   origins.forEach(origin => {
     const pc = document.createElement('link');
-    pc.rel = 'preconnect';
-    pc.href = origin;
-    pc.crossOrigin = '';
+    pc.rel = 'preconnect'; pc.href = origin; pc.crossOrigin = '';
     document.head.appendChild(pc);
-    const dns = document.createElement('link');
-    dns.rel = 'dns-prefetch';
-    dns.href = origin;
-    document.head.appendChild(dns);
   });
-  // 分批 prefetch URL 内容（每 300ms 一个，避免抢首屏带宽）
-  const toFetch = allItems.filter(it => it.embed_safe !== false && it.url);
-  toFetch.forEach((it, i) => {
+  allItems.filter(it => it.embed_safe !== false && it.url).forEach((it, i) => {
     setTimeout(() => {
       const pf = document.createElement('link');
-      pf.rel = 'prefetch';
-      pf.href = it.url;
-      pf.as = 'document';
+      pf.rel = 'prefetch'; pf.href = it.url; pf.as = 'document';
       document.head.appendChild(pf);
     }, i * 300);
   });

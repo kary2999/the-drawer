@@ -6,29 +6,31 @@
   },
   "categories": [
     {
+      "id": "yuanfang",
+      "name_zh": "远方来信",
+      "name_en": "YUANFANG SERIES",
+      "color": "#b13b1f",
+      "items": [
+        {"id":"tokyo-midnight","title_zh":"东京·深夜食堂","title_en":"TOKYO MIDNIGHT","tagline":"凌晨两点，东京还醒着","region":"关东·东京","lat":35.6762,"lng":139.6503,"url":"https://kary2999.github.io/tokyo-midnight/","embed_safe":true,"tags":["关东","美食","深夜"],"no":"01"},
+        {"id":"kyoto-teahouse","title_zh":"京都·茶寮帖","title_en":"KYOTO TEAHOUSE","tagline":"一碗抹茶，一千年","region":"关西·京都","lat":35.0116,"lng":135.7681,"url":"https://kary2999.github.io/kyoto-teahouse/","embed_safe":true,"tags":["关西","茶","和果子"],"no":"02"},
+        {"id":"osaka-kuidaore","title_zh":"大阪·吃倒","title_en":"OSAKA KUIDAORE","tagline":"在大阪，把今天吃完","region":"关西·大阪","lat":34.6937,"lng":135.5023,"url":"https://kary2999.github.io/osaka-kuidaore/","embed_safe":true,"tags":["关西","美食","市井"],"no":"03"},
+        {"id":"hokkaido-table","title_zh":"北海道·雪国食单","title_en":"HOKKAIDO TABLE","tagline":"雪国的桌子","region":"北海道·札幌","lat":43.0618,"lng":141.3545,"url":"https://kary2999.github.io/hokkaido-table/","embed_safe":true,"tags":["北海道","海鲜","雪国"],"no":"04"},
+        {"id":"onsen-kaiseki","title_zh":"温泉·怀石","title_en":"ONSEN KAISEKI","tagline":"一汤一餐，一夜温泉","region":"群马·草津温泉","lat":36.6238,"lng":138.5963,"url":"https://kary2999.github.io/onsen-kaiseki/","embed_safe":true,"tags":["温泉","怀石","旅馆"],"no":"05"},
+        {"id":"okinawa-izakaya","title_zh":"冲绳·居酒屋","title_en":"OKINAWA IZAKAYA","tagline":"海风、泡盛、三线琴","region":"冲绳·那霸","lat":26.2124,"lng":127.6809,"url":"https://kary2999.github.io/okinawa-izakaya/","embed_safe":true,"tags":["冲绳","海岛","居酒屋"],"no":"06"},
+        {"id":"kombini-poems","title_zh":"便利店·之诗","title_en":"KOMBINI POEMS","tagline":"全日本的厨房","region":"全境","lat":null,"lng":null,"url":"https://kary2999.github.io/kombini-poems/","embed_safe":true,"tags":["便利店","全境"],"no":"07"},
+        {"id":"kanto-seasons","title_zh":"关东·四季","title_en":"KANTO SEASONS","tagline":"关东的四季出行","region":"关东·横滨","lat":35.4437,"lng":139.6380,"url":"https://kary2999.github.io/kanto-seasons/","embed_safe":true,"tags":["关东","风景","节气"],"no":"08"},
+        {"id":"onsen-letters","title_zh":"温泉乡·漫游","title_en":"ONSEN LETTERS","tagline":"穿浴衣去走街","region":"神奈川·箱根","lat":35.2324,"lng":139.1069,"url":"https://kary2999.github.io/onsen-letters/","embed_safe":true,"tags":["温泉","风景","漫游"],"no":"09"},
+        {"id":"japan-tickets","title_zh":"日本·游乐场票务","title_en":"JAPAN TICKETS","tagline":"提前几月订票，把梦提早预约","region":"全境","lat":null,"lng":null,"url":"https://kary2999.github.io/japan-tickets/","embed_safe":true,"tags":["乐园","票务","攻略"],"no":"10"}
+      ]
+    },
+    {
       "id": "learn",
       "name_zh": "学习",
       "name_en": "STUDY",
-      "color": "#0f62fe",
+      "color": "#c9a86c",
       "items": [
-        {
-          "id": "tokyo-guide",
-          "title_zh": "东京·攻略手帖",
-          "title_en": "TOKYO GUIDE · Journal",
-          "tagline": "亲历者的东京旅行攻略",
-          "url": "https://kary2999.github.io/tokyo-guide/journal.html",
-          "embed_safe": true,
-          "tags": ["东京", "攻略", "旅行"]
-        },
-        {
-          "id": "japanese-grammar",
-          "title_zh": "日语语法",
-          "title_en": "Japanese Grammar",
-          "tagline": "日语语法卡片速查",
-          "url": "https://84-247-152-166.sslip.io/japanese-web/grammar",
-          "embed_safe": true,
-          "tags": ["日语", "语法", "词卡"]
-        }
+        {"id":"tokyo-guide","title_zh":"东京·攻略手帖","title_en":"TOKYO GUIDE","tagline":"亲历者的东京旅行攻略","short":"攻","url":"https://kary2999.github.io/tokyo-guide/journal.html","embed_safe":true,"tags":["东京","攻略"]},
+        {"id":"japanese-grammar","title_zh":"日语语法","title_en":"Japanese Grammar","tagline":"日语语法卡片速查","short":"语","url":"https://84-247-152-166.sslip.io/japanese-web/grammar","embed_safe":true,"tags":["日语","语法"]}
       ]
     },
     {
@@ -37,51 +39,9 @@
       "name_en": "TRAVEL · EXT",
       "color": "#7a3b2d",
       "items": [
-        {
-          "id": "didao",
-          "title_zh": "地道·本地美食",
-          "title_en": "DIDAO · Local Food Engine",
-          "tagline": "AI 驱动的本地人视角美食推荐",
-          "url": "https://didfood-kog52k47.manus.space/",
-          "embed_safe": true,
-          "tags": ["美食", "AI", "本地视角"]
-        },
-        {
-          "id": "dinner",
-          "title_zh": "今晚吃什么",
-          "title_en": "Dinner · What to eat",
-          "tagline": "今晚吃什么决策器（@tigerautumn）",
-          "url": "https://tigerautumn.github.io/dinner/",
-          "embed_safe": true,
-          "tags": ["美食", "决策"]
-        },
-        {
-          "id": "yoro",
-          "title_zh": "YORO·远方来信",
-          "title_en": "YORO · Letters from Afar",
-          "tagline": "日本季节性旅行手帖（@Ray）",
-          "url": "https://yoro.rayai.work/",
-          "embed_safe": true,
-          "tags": ["日本", "节气", "文艺"]
-        }
-      ]
-    },
-    {
-      "id": "yuanfang",
-      "name_zh": "远方来信",
-      "name_en": "YUANFANG SERIES",
-      "color": "#b13b1f",
-      "items": [
-        {"id":"tokyo-midnight","title_zh":"东京·深夜食堂","title_en":"TOKYO MIDNIGHT","tagline":"凌晨两点，东京还醒着","url":"https://kary2999.github.io/tokyo-midnight/","embed_safe":true,"tags":["关东","美食","深夜"],"cover":"https://raw.githubusercontent.com/kary2999/tokyo-midnight/main/cover.svg"},
-        {"id":"kyoto-teahouse","title_zh":"京都·茶寮帖","title_en":"KYOTO TEAHOUSE","tagline":"一碗抹茶，一千年","url":"https://kary2999.github.io/kyoto-teahouse/","embed_safe":true,"tags":["关西","茶","和果子"],"cover":"https://raw.githubusercontent.com/kary2999/kyoto-teahouse/main/cover.svg"},
-        {"id":"osaka-kuidaore","title_zh":"大阪·吃倒","title_en":"OSAKA KUIDAORE","tagline":"在大阪，把今天吃完","url":"https://kary2999.github.io/osaka-kuidaore/","embed_safe":true,"tags":["关西","美食","市井"],"cover":"https://raw.githubusercontent.com/kary2999/osaka-kuidaore/main/cover.svg"},
-        {"id":"hokkaido-table","title_zh":"北海道·雪国食单","title_en":"HOKKAIDO TABLE","tagline":"雪国的桌子","url":"https://kary2999.github.io/hokkaido-table/","embed_safe":true,"tags":["北海道","海鲜","雪国"],"cover":"https://raw.githubusercontent.com/kary2999/hokkaido-table/main/cover.svg"},
-        {"id":"onsen-kaiseki","title_zh":"温泉·怀石","title_en":"ONSEN KAISEKI","tagline":"一汤一餐，一夜温泉","url":"https://kary2999.github.io/onsen-kaiseki/","embed_safe":true,"tags":["温泉","怀石","旅馆"],"cover":"https://raw.githubusercontent.com/kary2999/onsen-kaiseki/main/cover.svg"},
-        {"id":"okinawa-izakaya","title_zh":"冲绳·居酒屋","title_en":"OKINAWA IZAKAYA","tagline":"海风、泡盛、三线琴","url":"https://kary2999.github.io/okinawa-izakaya/","embed_safe":true,"tags":["冲绳","海岛","居酒屋"],"cover":"https://raw.githubusercontent.com/kary2999/okinawa-izakaya/main/cover.svg"},
-        {"id":"kombini-poems","title_zh":"便利店·之诗","title_en":"KOMBINI POEMS","tagline":"全日本的厨房","url":"https://kary2999.github.io/kombini-poems/","embed_safe":true,"tags":["便利店","全境"],"cover":"https://raw.githubusercontent.com/kary2999/kombini-poems/main/cover.svg"},
-        {"id":"kanto-seasons","title_zh":"关东·四季","title_en":"KANTO SEASONS","tagline":"关东的四季出行","url":"https://kary2999.github.io/kanto-seasons/","embed_safe":true,"tags":["关东","风景","节气"],"cover":"https://raw.githubusercontent.com/kary2999/kanto-seasons/main/cover.svg"},
-        {"id":"onsen-letters","title_zh":"温泉乡·漫游","title_en":"ONSEN LETTERS","tagline":"穿浴衣去走街","url":"https://kary2999.github.io/onsen-letters/","embed_safe":true,"tags":["温泉","风景","漫游"],"cover":"https://raw.githubusercontent.com/kary2999/onsen-letters/main/cover.svg"},
-        {"id":"japan-tickets","title_zh":"日本·游乐场票务","title_en":"JAPAN TICKETS","tagline":"提前几月订票，把梦提早预约","url":"https://kary2999.github.io/japan-tickets/","embed_safe":true,"tags":["乐园","票务","攻略"],"cover":"https://raw.githubusercontent.com/kary2999/japan-tickets/main/cover.svg"}
+        {"id":"didao","title_zh":"地道·本地美食","title_en":"DIDAO","tagline":"AI 本地视角推荐","short":"地","url":"https://didfood-kog52k47.manus.space/","embed_safe":true,"tags":["美食","AI"]},
+        {"id":"dinner","title_zh":"今晚吃什么","title_en":"Dinner","tagline":"今晚吃什么决策器","short":"晚","url":"https://tigerautumn.github.io/dinner/","embed_safe":true,"tags":["美食"]},
+        {"id":"yoro","title_zh":"YORO·远方来信","title_en":"YORO","tagline":"日本季节性旅行手帖（@Ray）","short":"远","url":"https://yoro.rayai.work/","embed_safe":true,"tags":["日本","节气"]}
       ]
     }
   ]
