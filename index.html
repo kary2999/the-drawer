@@ -429,8 +429,16 @@ function loadItem(item, el) {
   iframe.className = 'iframe-host';
   iframe.src = item.url;
   iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+  iframe.setAttribute('loading', 'eager');
   let loaded = false;
-  iframe.onload = () => { loaded = true; loading.classList.add('hidden'); };
+  iframe.onload = () => {
+    loaded = true;
+    loading.classList.add('hidden');
+    if (!window.__warmedUp) {
+      window.__warmedUp = true;
+      setTimeout(warmupOthers, 1200);
+    }
+  };
   inner.appendChild(iframe);
 
   setTimeout(() => {
@@ -444,6 +452,37 @@ function loadItem(item, el) {
         </div>`;
     }
   }, 6000);
+}
+
+// 首屏加载完后，后台异步预热其他项目（DNS + TLS + 内容 prefetch）
+function warmupOthers() {
+  const origins = new Set();
+  allItems.forEach(it => {
+    if (it.embed_safe === false || !it.url) return;
+    try { origins.add(new URL(it.url).origin); } catch (e) {}
+  });
+  origins.forEach(origin => {
+    const pc = document.createElement('link');
+    pc.rel = 'preconnect';
+    pc.href = origin;
+    pc.crossOrigin = '';
+    document.head.appendChild(pc);
+    const dns = document.createElement('link');
+    dns.rel = 'dns-prefetch';
+    dns.href = origin;
+    document.head.appendChild(dns);
+  });
+  // 分批 prefetch URL 内容（每 300ms 一个，避免抢首屏带宽）
+  const toFetch = allItems.filter(it => it.embed_safe !== false && it.url);
+  toFetch.forEach((it, i) => {
+    setTimeout(() => {
+      const pf = document.createElement('link');
+      pf.rel = 'prefetch';
+      pf.href = it.url;
+      pf.as = 'document';
+      document.head.appendChild(pf);
+    }, i * 300);
+  });
 }
 </script>
 </body>
