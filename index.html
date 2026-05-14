@@ -530,6 +530,7 @@ function loadItem(item) {
 }
 
 function warmupOthers() {
+  // 只做 preconnect (DNS + TLS 握手)，不预拉全文 — 避免把网络烧光
   const origins = new Set();
   allItems.forEach(it => {
     if (it.embed_safe === false || !it.url) return;
@@ -539,13 +540,9 @@ function warmupOthers() {
     const pc = document.createElement('link');
     pc.rel = 'preconnect'; pc.href = origin; pc.crossOrigin = '';
     document.head.appendChild(pc);
-  });
-  allItems.filter(it => it.embed_safe !== false && it.url).forEach((it, i) => {
-    setTimeout(() => {
-      const pf = document.createElement('link');
-      pf.rel = 'prefetch'; pf.href = it.url; pf.as = 'document';
-      document.head.appendChild(pf);
-    }, i * 300);
+    const dns = document.createElement('link');
+    dns.rel = 'dns-prefetch'; dns.href = origin;
+    document.head.appendChild(dns);
   });
 }
 </script>

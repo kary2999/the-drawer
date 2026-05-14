@@ -20,7 +20,8 @@
         {"id":"kombini-poems","title_zh":"便利店·之诗","title_en":"KOMBINI POEMS","tagline":"全日本的厨房","region":"全境","lat":null,"lng":null,"url":"https://kary2999.github.io/kombini-poems/","embed_safe":true,"tags":["便利店","全境"],"no":"07"},
         {"id":"kanto-seasons","title_zh":"关东·四季","title_en":"KANTO SEASONS","tagline":"关东的四季出行","region":"关东·横滨","lat":35.4437,"lng":139.6380,"url":"https://kary2999.github.io/kanto-seasons/","embed_safe":true,"tags":["关东","风景","节气"],"no":"08"},
         {"id":"onsen-letters","title_zh":"温泉乡·漫游","title_en":"ONSEN LETTERS","tagline":"穿浴衣去走街","region":"神奈川·箱根","lat":35.2324,"lng":139.1069,"url":"https://kary2999.github.io/onsen-letters/","embed_safe":true,"tags":["温泉","风景","漫游"],"no":"09"},
-        {"id":"japan-tickets","title_zh":"日本·游乐场票务","title_en":"JAPAN TICKETS","tagline":"提前几月订票，把梦提早预约","region":"全境","lat":null,"lng":null,"url":"https://kary2999.github.io/japan-tickets/","embed_safe":true,"tags":["乐园","票务","攻略"],"no":"10"}
+        {"id":"japan-tickets","title_zh":"日本·游乐场票务","title_en":"JAPAN TICKETS","tagline":"提前几月订票，把梦提早预约","region":"全境","lat":null,"lng":null,"url":"https://kary2999.github.io/japan-tickets/","embed_safe":true,"tags":["乐园","票务","攻略"],"no":"10"},
+        {"id":"tokyo-guide","title_zh":"东京·攻略手帖","title_en":"TOKYO GUIDE","tagline":"亲历者的东京旅行攻略","region":"关东·东京","lat":35.6580,"lng":139.7016,"url":"https://kary2999.github.io/tokyo-guide/","embed_safe":true,"tags":["东京","攻略","旅行"],"no":"11"}
       ]
     },
     {
@@ -29,7 +30,6 @@
       "name_en": "STUDY",
       "color": "#c9a86c",
       "items": [
-        {"id":"tokyo-guide","title_zh":"东京·攻略手帖","title_en":"TOKYO GUIDE","tagline":"亲历者的东京旅行攻略","short":"攻","url":"https://kary2999.github.io/tokyo-guide/journal.html","embed_safe":true,"tags":["东京","攻略"]},
         {"id":"japanese-grammar","title_zh":"日语语法","title_en":"Japanese Grammar","tagline":"日语语法卡片速查","short":"语","url":"https://84-247-152-166.sslip.io/japanese-web/grammar","embed_safe":true,"tags":["日语","语法"]}
       ]
     },
