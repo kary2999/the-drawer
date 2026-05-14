@@ -408,9 +408,9 @@ function initMap(data) {
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map);
 
-  // 加 markers
-  const yuanfangCat = data.categories.find(c => c.id === 'yuanfang');
-  yuanfangCat.items.forEach(it => {
+  // 加 markers — 兼容 japan / yuanfang 两个 category id
+  const geoCat = data.categories.find(c => c.id === 'japan' || c.id === 'yuanfang');
+  geoCat.items.forEach(it => {
     if (!it.lat) return;
     allItems.push(it);
     const icon = L.divIcon({
@@ -430,7 +430,7 @@ function initMap(data) {
 function initSidePanel(data) {
   const panel = document.getElementById('side-panel');
   data.categories.forEach(cat => {
-    if (cat.id === 'yuanfang') {
+    if (cat.id === 'japan' || cat.id === 'yuanfang') {
       // 全境项目（lat=null）显示为标签
       const noGeo = cat.items.filter(it => !it.lat);
       if (noGeo.length === 0) return;
