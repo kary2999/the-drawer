@@ -383,20 +383,21 @@ let map, allItems = [], markers = {}, currentItem = null;
 fetch('data/sites.json').then(r => r.json()).then(data => {
   initMap(data);
   initSidePanel(data);
-  // 自动加载第一个 远方
-  const firstGeo = data.categories[0].items.find(it => it.lat);
-  if (firstGeo) {
-    setTimeout(() => loadItem(firstGeo), 200);
+  // 自动加载第一个 远方（iframe），但不飞地图 — 让用户看到全日本视角
+  const firstItem = data.categories[0].items[0];
+  if (firstItem) {
+    setTimeout(() => loadItem(firstItem, true), 200);
   }
 });
 
 function initMap(data) {
   map = L.map('map', {
-    center: [37.5, 138.5],
+    center: [35, 137],
     zoom: 5,
     zoomControl: false,
     attributionControl: false,
     scrollWheelZoom: true,
+    minZoom: 4,
   });
 
   // CartoDB Dark Matter — 暗色调，跟暗夜杂志风一致
@@ -472,7 +473,7 @@ function initSidePanel(data) {
   });
 }
 
-function loadItem(item) {
+function loadItem(item, skipFly) {
   currentItem = item;
   // 状态栏
   const status = document.getElementById('status');
@@ -483,8 +484,10 @@ function loadItem(item) {
   if (item.lat && markers[item.id]) {
     const pin = document.querySelector(`.pin-marker[data-id="${item.id}"]`);
     if (pin) pin.classList.add('active');
-    map.flyTo([item.lat, item.lng], 7, { duration: 0.8 });
-    markers[item.id].openPopup();
+    if (!skipFly) {
+      map.flyTo([item.lat, item.lng], 7, { duration: 0.8 });
+      markers[item.id].openPopup();
+    }
   }
   // 高亮 avatar / tag
   document.querySelectorAll('.avatar').forEach(a => a.classList.toggle('active', a.dataset.id === item.id));

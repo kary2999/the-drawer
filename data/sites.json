@@ -40,7 +40,6 @@
       "name_en": "TRAVEL",
       "color": "#7a3b2d",
       "items": [
-        {"id":"yoro","title_zh":"YORO·远方来信","title_en":"YORO","tagline":"日本季节性旅行手帖（@Ray）","short":"远","url":"https://yoro.rayai.website/","embed_safe":true,"tags":["日本","节气"]},
         {"id":"didao","title_zh":"地道·本地美食","title_en":"DIDAO","tagline":"AI 本地视角推荐","short":"地","url":"https://didfood-kog52k47.manus.space/","embed_safe":true,"tags":["美食","AI"]},
         {"id":"dinner","title_zh":"今晚吃什么","title_en":"Dinner","tagline":"今晚吃什么决策器","short":"晚","url":"https://tigerautumn.github.io/dinner/","embed_safe":true,"tags":["美食"]}
       ]
