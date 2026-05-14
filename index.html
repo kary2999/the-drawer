@@ -8,41 +8,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root {
-  --bg: #0a0a0c;
-  --bg-2: #15151a;
-  --bg-3: #1a1a20;
-  --paper: #1f1f24;
-  --ink: #f5f1e8;
-  --ink-2: #c4bca8;
-  --mute: #6b6258;
-  --line: #2a2a30;
-  --gold: #c9a86c;
-  --red: #d94f4f;
-  --serif: "Noto Serif JP", "Songti SC", "Hiragino Mincho ProN", "Source Han Serif", serif;
+  --bg: #0a0a0c; --bg-2: #15151a; --bg-3: #1a1a20; --paper: #1f1f24;
+  --ink: #f5f1e8; --ink-2: #c4bca8; --mute: #6b6258; --line: #2a2a30;
+  --gold: #c9a86c; --red: #d94f4f;
+  --serif: "Noto Serif JP", "Songti SC", "Hiragino Mincho ProN", serif;
   --display: "Cormorant Garamond", "Times New Roman", serif;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--serif);
-  letter-spacing: 0.03em;
-  height: 100vh;
-  overflow: hidden;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--serif); letter-spacing: 0.03em;
+  height: 100vh; overflow: hidden;
 }
 
 .app {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 340px 1fr;
   grid-template-rows: 56px 1fr;
   grid-template-areas: "topbar topbar" "left main";
   height: 100vh;
 }
 
-/* TOPBAR */
 .topbar {
-  grid-area: topbar;
-  background: var(--bg);
+  grid-area: topbar; background: var(--bg);
   border-bottom: 1px solid var(--line);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px;
@@ -59,15 +47,11 @@ html, body {
   font-weight: 500; font-family: var(--serif); font-style: normal;
   font-size: 14px; letter-spacing: 0; transform: rotate(-3deg);
 }
-.topbar-actions {
-  display: flex; align-items: center; gap: 18px;
-}
+.topbar-actions { display: flex; align-items: center; gap: 18px; }
 .status {
-  background: transparent;
-  border: 1px solid var(--line);
-  padding: 6px 14px;
-  font-size: 12px; color: var(--gold);
-  max-width: 360px; overflow: hidden;
+  background: transparent; border: 1px solid var(--line);
+  padding: 6px 14px; font-size: 12px; color: var(--gold);
+  max-width: 380px; overflow: hidden;
   text-overflow: ellipsis; white-space: nowrap;
   letter-spacing: 0.05em;
   font-family: var(--display); font-style: italic;
@@ -86,59 +70,40 @@ html, body {
   letter-spacing: 0.5em; text-transform: uppercase;
 }
 
-/* LEFT — map + avatars */
 .left {
-  grid-area: left;
-  background: var(--bg-2);
+  grid-area: left; background: var(--bg-2);
   border-right: 1px solid var(--line);
-  display: grid;
-  grid-template-rows: 360px 1fr;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 #map {
-  width: 100%; height: 100%;
-  background: var(--bg-3);
-  position: relative;
+  width: 100%; height: 280px;
+  background: var(--bg-3); position: relative;
 }
 .map-overlay {
-  position: absolute; top: 12px; left: 12px; z-index: 500;
+  position: absolute; top: 10px; left: 12px; z-index: 500;
   font-family: var(--display); font-style: italic;
   font-size: 10px; letter-spacing: 0.4em;
   color: var(--gold); pointer-events: none;
 }
 .map-overlay .vol-tag {
-  display: block;
-  font-size: 9px; color: var(--mute);
+  display: block; font-size: 9px; color: var(--mute);
   letter-spacing: 0.5em; margin-top: 3px;
 }
-.map-attribution {
-  position: absolute; bottom: 4px; right: 6px; z-index: 500;
-  font-size: 9px; color: var(--mute); opacity: 0.6;
-  font-family: var(--display); font-style: italic;
-}
 
-/* Leaflet custom marker */
 .pin-marker {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: var(--gold);
-  color: var(--bg);
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--gold); color: var(--bg);
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700;
+  font-size: 10px; font-weight: 700;
   border: 2px solid var(--bg);
-  font-family: var(--display);
-  cursor: pointer;
+  font-family: var(--display); cursor: pointer;
   transition: transform 0.15s, background 0.15s;
 }
 .pin-marker.active {
-  background: var(--red);
-  transform: scale(1.2);
-  color: var(--ink);
+  background: var(--red); transform: scale(1.2); color: var(--ink);
 }
-.pin-marker:hover {
-  transform: scale(1.15);
-}
+.pin-marker:hover { transform: scale(1.15); }
 .leaflet-popup-content-wrapper {
   background: var(--paper); color: var(--ink);
   border: 1px solid var(--gold); border-radius: 0;
@@ -146,27 +111,20 @@ html, body {
 .leaflet-popup-content { margin: 10px 14px; font-family: var(--serif); }
 .leaflet-popup-content .pp-num {
   font-size: 10px; color: var(--gold);
-  letter-spacing: 0.4em; font-family: var(--display);
-  font-style: italic;
+  letter-spacing: 0.4em; font-family: var(--display); font-style: italic;
 }
 .leaflet-popup-content .pp-name {
-  font-size: 14px; color: var(--ink);
-  margin-top: 2px; letter-spacing: 0.04em;
+  font-size: 14px; color: var(--ink); margin-top: 2px; letter-spacing: 0.04em;
 }
 .leaflet-popup-tip { background: var(--paper); border: 1px solid var(--gold); }
 
-/* avatars panel */
-.side-panel {
-  overflow-y: auto;
-  padding: 0;
-}
 .cat-block {
   border-bottom: 1px solid var(--line);
-  padding: 14px 0;
+  padding: 12px 0 14px;
 }
 .cat-block:last-child { border-bottom: none; }
 .cat-head {
-  padding: 0 18px 12px;
+  padding: 0 18px 8px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .cat-head .name {
@@ -179,10 +137,53 @@ html, body {
   font-family: var(--display); font-style: italic;
 }
 
+.row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 18px; cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-left-color 0.15s;
+}
+.row:hover { background: rgba(201,168,108,0.06); }
+.row.active {
+  background: var(--paper); border-left-color: var(--gold);
+}
+.row .badge {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--paper); color: var(--gold);
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; font-family: var(--display);
+  flex-shrink: 0;
+}
+.row.active .badge {
+  background: var(--gold); color: var(--bg);
+}
+.row.pinned .badge::before {
+  content: "★"; position: absolute; transform: translate(13px, -10px);
+  font-size: 10px; color: var(--red);
+}
+.row .meta {
+  flex: 1; min-width: 0;
+}
+.row .meta .title {
+  font-size: 13px; color: var(--ink);
+  letter-spacing: 0.04em; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.row .meta .region {
+  font-size: 10px; color: var(--mute);
+  font-family: var(--display); font-style: italic;
+  margin-top: 1px; letter-spacing: 0.1em;
+}
+.row .geo-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0; opacity: 0.6;
+}
+.row .geo-dot.none { opacity: 0; }
+
 .avatars-row {
-  padding: 0 14px;
-  display: flex; flex-wrap: wrap; gap: 12px;
-  justify-content: flex-start;
+  padding: 6px 14px;
+  display: flex; flex-wrap: wrap; gap: 14px;
 }
 .avatar {
   display: flex; flex-direction: column;
@@ -192,17 +193,14 @@ html, body {
 }
 .avatar:hover { transform: translateY(-2px); }
 .avatar .ring {
-  width: 44px; height: 44px;
-  border-radius: 50%;
+  width: 40px; height: 40px; border-radius: 50%;
   background: var(--paper); color: var(--gold);
   border: 1px solid var(--gold);
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 400;
+  font-size: 14px; font-weight: 400;
   transition: all 0.2s;
 }
-.avatar.active .ring {
-  background: var(--gold); color: var(--bg);
-}
+.avatar.active .ring { background: var(--gold); color: var(--bg); }
 .avatar .label {
   font-size: 10px; color: var(--ink-2);
   white-space: nowrap; overflow: hidden;
@@ -211,80 +209,12 @@ html, body {
 }
 .avatar.active .label { color: var(--gold); }
 
-.tag-rail {
-  padding: 0 14px;
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
-.tag-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 12px; background: var(--paper);
-  color: var(--ink-2); border: 1px solid var(--line);
-  border-radius: 999px; font-size: 11px;
-  letter-spacing: 0.1em; cursor: pointer;
-  transition: all 0.2s;
-}
-.tag-pill:hover, .tag-pill.active {
-  border-color: var(--gold); color: var(--ink);
-}
-.tag-pill .num {
-  font-family: var(--display); font-style: italic;
-  color: var(--gold);
-}
-
-/* MAIN */
 .main {
-  grid-area: main;
-  background: var(--bg-3);
+  grid-area: main; background: var(--bg-3);
   position: relative; overflow: hidden;
 }
-.iframe-host {
-  width: 100%; height: 100%; border: none; background: #fff;
-}
+.iframe-host { width: 100%; height: 100%; border: none; background: #fff; }
 
-/* WELCOME */
-.welcome {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: var(--bg-3); padding: 48px; text-align: center;
-}
-.welcome::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background-image: radial-gradient(circle at 30% 20%, rgba(201,168,108,0.08), transparent 50%);
-}
-.welcome > * { position: relative; z-index: 1; }
-.welcome .tag {
-  display: inline-block; padding: 5px 14px;
-  border: 1px solid var(--gold);
-  font-size: 10px; letter-spacing: 0.6em;
-  color: var(--gold); text-transform: uppercase;
-  margin-bottom: 32px;
-  font-family: var(--display); font-style: italic;
-}
-.welcome h1 {
-  font-size: clamp(48px, 7vw, 96px);
-  font-weight: 400; line-height: 0.95;
-  letter-spacing: -0.01em; color: var(--ink);
-  margin-bottom: 12px;
-}
-.welcome h1 em {
-  font-family: var(--display); font-style: italic;
-  color: var(--gold); font-weight: 400;
-}
-.welcome .lead {
-  font-size: 14px; color: var(--ink-2);
-  line-height: 2; margin-top: 24px;
-  font-family: var(--display); font-style: italic;
-  max-width: 460px;
-}
-.welcome .hint {
-  margin-top: 32px;
-  font-size: 10px; color: var(--mute);
-  letter-spacing: 0.5em; text-transform: uppercase;
-  font-family: var(--display); font-style: italic;
-}
-
-/* iframe error */
 .iframe-error {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
@@ -320,23 +250,17 @@ html, body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.side-panel::-webkit-scrollbar { width: 6px; }
-.side-panel::-webkit-scrollbar-track { background: var(--bg-2); }
-.side-panel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.left::-webkit-scrollbar { width: 6px; }
+.left::-webkit-scrollbar-track { background: var(--bg-2); }
+.left::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
 
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
-    grid-template-rows: 56px 280px 240px 1fr;
-    grid-template-areas: "topbar" "map-mobile" "side-mobile" "main";
+    grid-template-rows: 56px 50vh 50vh;
+    grid-template-areas: "topbar" "left" "main";
   }
-  .left {
-    display: contents;
-  }
-  #map { grid-area: map-mobile; }
-  .side-panel { grid-area: side-mobile; border-bottom: 1px solid var(--line); }
   .status { display: none; }
-  .welcome h1 { font-size: 48px; }
 }
 </style>
 </head>
@@ -349,7 +273,7 @@ html, body {
       <span>POETRY &amp; DISTANCE</span>
     </div>
     <div class="topbar-actions">
-      <div class="status" id="status">— pick a pin on the map —</div>
+      <div class="status" id="status">— pick a place —</div>
       <button class="btn" onclick="location.reload()">home</button>
       <span class="vol">VOL. 01</span>
     </div>
@@ -359,19 +283,17 @@ html, body {
     <div id="map">
       <div class="map-overlay">
         JAPAN · 日本
-        <span class="vol-tag">10 ISSUES · UPDATED DAILY</span>
+        <span class="vol-tag">11 ISSUES · UPDATED DAILY</span>
       </div>
     </div>
-    <div class="side-panel" id="side-panel"></div>
+    <div id="side-panel"></div>
   </aside>
 
   <main class="main">
     <div id="main-inner" style="position:relative;height:100%;">
-      <div class="welcome" id="welcome">
-        <div class="tag">Issue 01 · 立夏 · May 2026</div>
-        <h1>诗 与 <em>远方</em></h1>
-        <div class="lead">点左边地图上的金色 pin，<br>或下方的小头像。</div>
-        <div class="hint">← click a pin</div>
+      <div class="iframe-error">
+        <h2><em>诗 与</em> 远方</h2>
+        <p>点左边任意一项<br>地图上的 pin 或下方列表都可以</p>
       </div>
     </div>
   </main>
@@ -383,43 +305,30 @@ let map, allItems = [], markers = {}, currentItem = null;
 fetch('data/sites.json').then(r => r.json()).then(data => {
   initMap(data);
   initSidePanel(data);
-  // 自动加载第一个 远方（iframe），但不飞地图 — 让用户看到全日本视角
   const firstItem = data.categories[0].items[0];
-  if (firstItem) {
-    setTimeout(() => loadItem(firstItem, true), 200);
-  }
+  if (firstItem) setTimeout(() => loadItem(firstItem, true), 200);
 });
 
 function initMap(data) {
   map = L.map('map', {
-    center: [35, 137],
-    zoom: 5,
-    zoomControl: false,
-    attributionControl: false,
+    center: [35, 137], zoom: 5, minZoom: 4,
+    zoomControl: false, attributionControl: false,
     scrollWheelZoom: true,
-    minZoom: 4,
   });
-
-  // CartoDB Dark Matter — 暗色调，跟暗夜杂志风一致
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     subdomains: 'abcd', maxZoom: 19,
     attribution: '© OSM © CartoDB',
   }).addTo(map);
-
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map);
 
-  // 加 markers — 兼容 japan / yuanfang 两个 category id
   const geoCat = data.categories.find(c => c.id === 'japan' || c.id === 'yuanfang');
   geoCat.items.forEach(it => {
     if (!it.lat) return;
-    allItems.push(it);
     const icon = L.divIcon({
       className: 'pin-marker-wrap',
       html: `<div class="pin-marker" data-id="${it.id}">${it.no}</div>`,
-      iconSize: [26, 26],
-      iconAnchor: [13, 13],
-      popupAnchor: [0, -16],
+      iconSize: [24, 24], iconAnchor: [12, 12], popupAnchor: [0, -16],
     });
     const m = L.marker([it.lat, it.lng], { icon }).addTo(map);
     m.bindPopup(`<div class="pp-num">NO. ${it.no} · ${it.region}</div><div class="pp-name">${it.title_zh}</div>`);
@@ -431,74 +340,70 @@ function initMap(data) {
 function initSidePanel(data) {
   const panel = document.getElementById('side-panel');
   data.categories.forEach(cat => {
-    if (cat.id === 'japan' || cat.id === 'yuanfang') {
-      // 全境项目（lat=null）显示为标签
-      const noGeo = cat.items.filter(it => !it.lat);
-      if (noGeo.length === 0) return;
-      const block = document.createElement('div');
-      block.className = 'cat-block';
-      block.innerHTML = `<div class="cat-head"><span class="name">全境 · ALL JAPAN</span><span class="count">${noGeo.length}</span></div>`;
-      const rail = document.createElement('div');
-      rail.className = 'tag-rail';
-      noGeo.forEach(it => {
-        const t = document.createElement('span');
-        t.className = 'tag-pill';
-        t.dataset.id = it.id;
-        t.innerHTML = `<span class="num">${it.no}</span> ${it.title_zh}`;
-        t.addEventListener('click', () => loadItem(it));
-        rail.appendChild(t);
-      });
-      block.appendChild(rail);
-      panel.appendChild(block);
-      noGeo.forEach(it => allItems.push(it));
-      return;
-    }
-    // 学习 / 外部 → 头像
+    cat.items.forEach(it => allItems.push(it));
     const block = document.createElement('div');
     block.className = 'cat-block';
     block.innerHTML = `<div class="cat-head"><span class="name">${cat.name_zh} · ${cat.name_en}</span><span class="count">${cat.items.length}</span></div>`;
-    const row = document.createElement('div');
-    row.className = 'avatars-row';
-    cat.items.forEach(it => {
-      allItems.push(it);
-      const a = document.createElement('div');
-      a.className = 'avatar';
-      a.dataset.id = it.id;
-      a.innerHTML = `<div class="ring">${it.short || it.title_zh.charAt(0)}</div><div class="label">${it.title_zh}</div>`;
-      a.addEventListener('click', () => loadItem(it));
-      row.appendChild(a);
-    });
-    block.appendChild(row);
+
+    if (cat.id === 'japan' || cat.id === 'yuanfang') {
+      // 11 个全部以 row 显示（包含全境）
+      cat.items.forEach(it => {
+        const row = document.createElement('div');
+        row.className = 'row' + (it.pinned ? ' pinned' : '');
+        row.dataset.id = it.id;
+        row.innerHTML = `
+          <div class="badge" style="position:relative">${it.no}</div>
+          <div class="meta">
+            <div class="title">${it.title_zh}</div>
+            <div class="region">${it.region}</div>
+          </div>
+          <div class="geo-dot ${it.lat ? '' : 'none'}"></div>
+        `;
+        row.addEventListener('click', () => loadItem(it));
+        block.appendChild(row);
+      });
+    } else {
+      // 学习 / 旅游 — 头像
+      const ar = document.createElement('div');
+      ar.className = 'avatars-row';
+      cat.items.forEach(it => {
+        const a = document.createElement('div');
+        a.className = 'avatar';
+        a.dataset.id = it.id;
+        a.innerHTML = `<div class="ring">${it.short || it.title_zh.charAt(0)}</div><div class="label">${it.title_zh}</div>`;
+        a.addEventListener('click', () => loadItem(it));
+        ar.appendChild(a);
+      });
+      block.appendChild(ar);
+    }
     panel.appendChild(block);
   });
 }
 
 function loadItem(item, skipFly) {
   currentItem = item;
-  // 状态栏
-  const status = document.getElementById('status');
-  status.textContent = item.title_zh + (item.title_en ? ' · ' + item.title_en : '');
+  document.getElementById('status').textContent = item.title_zh + (item.title_en ? ' · ' + item.title_en : '');
 
-  // 高亮 marker
+  document.querySelectorAll('.row').forEach(r => r.classList.toggle('active', r.dataset.id === item.id));
+  document.querySelectorAll('.avatar').forEach(a => a.classList.toggle('active', a.dataset.id === item.id));
   document.querySelectorAll('.pin-marker').forEach(p => p.classList.remove('active'));
+
   if (item.lat && markers[item.id]) {
     const pin = document.querySelector(`.pin-marker[data-id="${item.id}"]`);
     if (pin) pin.classList.add('active');
     if (!skipFly) {
-      map.flyTo([item.lat, item.lng], 7, { duration: 0.8 });
+      map.flyTo([item.lat, item.lng], 8, { duration: 0.7 });
       markers[item.id].openPopup();
     }
+  } else if (!skipFly && map) {
+    map.flyTo([35, 137], 5, { duration: 0.7 });
   }
-  // 高亮 avatar / tag
-  document.querySelectorAll('.avatar').forEach(a => a.classList.toggle('active', a.dataset.id === item.id));
-  document.querySelectorAll('.tag-pill').forEach(t => t.classList.toggle('active', t.dataset.id === item.id));
 
-  // iframe
   const inner = document.getElementById('main-inner');
   inner.innerHTML = '';
 
   if (item.embed_safe === false) {
-    inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂不支持嵌入预览</em></h2><p>这个站点的安全策略拒绝了 iframe。<br>翻翻别的项目吧。</p></div>`;
+    inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂不支持嵌入预览</em></h2><p>这个站点的安全策略拒绝了 iframe。</p></div>`;
     return;
   }
 
@@ -514,26 +419,20 @@ function loadItem(item, skipFly) {
   iframe.setAttribute('loading', 'eager');
   let loaded = false;
   iframe.onload = () => {
-    loaded = true;
-    loading.classList.add('hidden');
-    if (!window.__warmedUp) {
-      window.__warmedUp = true;
-      setTimeout(warmupOthers, 1200);
-    }
+    loaded = true; loading.classList.add('hidden');
+    if (!window.__warmedUp) { window.__warmedUp = true; setTimeout(warmupOthers, 1500); }
   };
   inner.appendChild(iframe);
 
   setTimeout(() => {
     if (!loaded) {
-      loading.classList.add('hidden');
-      iframe.remove();
-      inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂时未能加载</em></h2><p>站点拒绝嵌入或正在响应中。<br>翻翻别的项目吧。</p></div>`;
+      loading.classList.add('hidden'); iframe.remove();
+      inner.innerHTML = `<div class="iframe-error"><h2>${item.title_zh}<br><em>暂时未能加载</em></h2><p>站点拒绝嵌入或正在响应中。</p></div>`;
     }
   }, 6000);
 }
 
 function warmupOthers() {
-  // 只做 preconnect (DNS + TLS 握手)，不预拉全文 — 避免把网络烧光
   const origins = new Set();
   allItems.forEach(it => {
     if (it.embed_safe === false || !it.url) return;
